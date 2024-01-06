@@ -51,7 +51,7 @@ class UnitTestCase(TestCase):
         self.assertIn('Create a User', html)
         self.assertEqual(resp.status_code, 200)
     
-    def test_details(self,user_id):
+    def test_details(self):
         client = app.test_client()
         resp1 = client.get('/users/1')
         html = resp1.get_data(as_text=True)
@@ -66,3 +66,16 @@ class UnitTestCase(TestCase):
 
         self.assertIn('Dylan Trika',html)
         self.assertEqual(resp1.status_code, 200)
+    
+    def test_creating_user(self):
+        client = app.test_client()
+        resp1 = client.post('/users/new', follow_redirects=True, data ={'first_name':'Dublin','last_name':'Trika','image_url':'https://img.buzzfeed.com/buzzfeed-static/static/2018-03/30/13/campaign_images/buzzfeed-prod-web-02/29-cool-and-random-things-you-can-probably-afford-2-3151-1522429262-9_dblbig.jpg?resize=1200:*'})
+        html = resp1.get_data(as_text=True)
+
+        self.assertIn('Dublin Trika',html)
+        self.assertEqual(resp1.status_code, 200)
+    
+    def test_delete(self):
+        client = app.test_client()
+        
+
