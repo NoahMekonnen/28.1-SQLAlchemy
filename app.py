@@ -56,7 +56,6 @@ def edit_user(user_id):
     new_last_name = request.form['last_name']
     new_image_url = request.form['image_url']
     user = User.query.get(user_id)
-    print(user,"This is the user object")
     if new_first_name:
         user.first_name = new_first_name 
     if new_last_name:
