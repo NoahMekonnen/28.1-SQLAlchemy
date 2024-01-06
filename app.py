@@ -5,6 +5,7 @@ from models import db, connect_db, User
 from flask_debugtoolbar import DebugToolbarExtension
 
 app = Flask(__name__)
+app.app_context().push()
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///Users'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_ECHO'] = True
@@ -13,6 +14,7 @@ app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False
 debug = DebugToolbarExtension(app)
 
 connect_db(app)
+db.drop_all()
 db.create_all()
 
 @app.route('/')
@@ -22,7 +24,7 @@ def welcome():
 @app.route('/users')
 def show_users():
     users = User.query.all()
-    return ('home.html', users)
+    return render_template('home.html', users=users)
 
 @app.route('/users/new')
 def user_form():
@@ -40,12 +42,12 @@ def creating_user():
 
 @app.route('/users/<int:user_id>')
 def details(user_id):
-    user = User.query.get(user_id).first()
-    render_template('detail.html', user=user)
+    user = User.query.get(user_id)
+    return render_template('detail.html', user=user)
 
 @app.route('/users/<int:user_id>/edit')
 def edit_form(user_id):
-    user = User.query.get(user_id).first()
+    user = User.query.get(user_id)
     return render_template('edit-user-form.html', user=user)
 
 @app.route('/users/<int:user_id>/edit', methods = ['POST'])
@@ -53,7 +55,7 @@ def edit_user(user_id):
     new_first_name = request.form['first_name']
     new_last_name = request.form['last_name']
     new_image_url = request.form['image_url']
-    user = User.query.get(user_id).first()
+    user = User.query.get(user_id)
     if new_first_name:
         user.first_name = new_first_name 
     if new_last_name:
@@ -62,7 +64,7 @@ def edit_user(user_id):
         user.image_url = new_image_url
     db.session.add(user)
     db.session.commit()
-    return redirect(f"/users/${user.id}")
+    return redirect(f"/users/{user_id}")
 
 @app.route('/users/<int:user_id>/delete', methods = ['POST'])
 def delete(user_id):
