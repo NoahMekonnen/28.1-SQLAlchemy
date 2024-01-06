@@ -9,7 +9,7 @@ app.app_context().push()
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///Users'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_ECHO'] = True
-app.config['SECRET_KEY'] = "Godalone"
+app.config['SECRET_KEY'] = "Godalone1."
 app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False
 debug = DebugToolbarExtension(app)
 
@@ -56,7 +56,7 @@ def edit_user(user_id):
     new_last_name = request.form['last_name']
     new_image_url = request.form['image_url']
     user = User.query.get(user_id)
-    print(user)
+    print(user,"This is the user object")
     if new_first_name:
         user.first_name = new_first_name 
     if new_last_name:
@@ -67,9 +67,9 @@ def edit_user(user_id):
     db.session.commit()
     return redirect(f"/users/{user_id}")
 
-@app.route('/users/<int:user_id>/delete', methods = ['POST'])
+@app.route('/users/<int:user_id>/delete')
 def delete(user_id):
-    User.query.get(user_id).delete()
+    User.query.filter_by(id=user_id).delete()
     db.session.commit()
     return redirect('/users')
 

@@ -77,5 +77,11 @@ class UnitTestCase(TestCase):
     
     def test_delete(self):
         client = app.test_client()
-        
+        resp1 = client.get('users/1/delete',follow_redirects=True)
+        resp2 = client.get('users/2/delete')
+        resp3 = client.get('/users')
+        html = resp3.get_data(as_text=True)
+
+        self.assertIn('Dylan Trika', html)
+        self.assertEqual(resp1.status_code, 200)
 
