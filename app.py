@@ -71,5 +71,3 @@ def delete(user_id):
     User.query.filter_by(id=user_id).delete()
     db.session.commit()
     return redirect('/users')
-
-

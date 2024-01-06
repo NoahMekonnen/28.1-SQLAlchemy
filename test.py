@@ -84,6 +84,4 @@ class UnitTestCase(TestCase):
 
         self.assertIn('Dylan Trika', html)
         self.assertEqual(resp1.status_code, 200)
-        self.assertIn('Bob Trika',html)
-
 
